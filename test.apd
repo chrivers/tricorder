@@ -1,0 +1,8 @@
+# this is just a comment
+!start=2016-09-26_13:37:42
+S efbeadde8c000000010000
+S efbeadde2c000000010000 # this line has a comment
+C efbeadde24000000020000 @000124153
+# comments allowed for whole lines too, and metadata as well:
+!metadata_mark=0x17
+S efbeadde27000000010000 @000124153 # timestamp AND comment
