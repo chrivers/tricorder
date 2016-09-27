@@ -5,7 +5,7 @@ import sys, os
 import fileinput
 
 RE_BITS = {
-    "packet": "([CS]\d*)\s+([A-Fa-f0-9]+)",
+    "packet": "(?P<source>[CS]\d*)\s+(?P<packet>[A-Fa-f0-9]+)",
     "metadata": "!(?P<key>\w+)(?:=(?P<value>\S+?))?",
     "comment": "(?:#\s*(?P<comment>.*))?",
     "timestamp": "(?:@(?P<timestamp>[0-9]+))?",
@@ -19,11 +19,8 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 for index, line in enumerate(fileinput.input(files=sys.argv[1:])):
-    # remove leading and trailing whitespace
-    line = line.strip()
-
     # ignore full-line comments
-    if line.startswith("#"):
+    if RE_COMMENT.match(line):
         continue
 
     # check for metadata
@@ -35,7 +32,7 @@ for index, line in enumerate(fileinput.input(files=sys.argv[1:])):
     # check for packets
     packet = RE_PACKET.match(line)
     if packet:
-        print("packet: [%s] sent [%s] (timestamp: %s)" % (packet.group(1), packet.group(2), packet.group(3)))
+        print("packet: [%s] sent [%s] (timestamp: %s)" % (packet.group("source"), packet.group("packet"), packet.group("timestamp")))
         continue
 
     # give up
